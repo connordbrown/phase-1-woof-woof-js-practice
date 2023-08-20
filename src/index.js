@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
           // display dogBar when page loads
           createDog(data);
           const filterBtn = document.querySelector('#good-dog-filter');
+          
+          // filter dogs based on isGoodDog value
           filterBtn.addEventListener('click', () => {
             // clear out dogBar and dogInfo before filtering
             const dogBar = document.querySelector('#dog-bar');
@@ -35,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dogSpan.textContent = dog.name;
         dogBar.appendChild(dogSpan);
   
+        // display dog data
         dogSpan.addEventListener('click', () => {
           const dogInfo = document.querySelector('#dog-info');
           const { image, name, isGoodDog, id } = dog;
@@ -49,18 +52,23 @@ document.addEventListener('DOMContentLoaded', () => {
           } else {
             goodBadDog.textContent = "Bad Dog!";
           }
+
+          // update dog isGoodDog in DOM and server
           goodBadDog.addEventListener('click', () => {
             let good = true;
             if (goodBadDog.textContent === "Good Dog!") {
               goodBadDog.textContent = "Bad Dog!";
               good = false;
+              // update in DOM data
               dog.isGoodDog = false;
             } else {
               goodBadDog.textContent = "Good Dog!";
               good = true;
+              // update in DOM data
               dog.isGoodDog = true;
             }
-  
+            
+            // update server with new isGoodDog status
             const updateObj = {
               method: "PATCH",
               headers: {
@@ -72,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             fetch(`http://localhost:3000/pups/${id}`, updateObj)
               .catch(error => alert(error.message))
           });
+          // append elements to dogInfo
           dogInfo.appendChild(dogImg);
           dogInfo.appendChild(dogName);
           dogInfo.appendChild(goodBadDog);
